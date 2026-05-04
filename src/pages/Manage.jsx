@@ -1,40 +1,44 @@
 import React, { useState } from 'react'
 import Form from 'react-bootstrap/Form';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 function Manage() {
-  const {id} = useParams()
+  const { id } = useParams()
   console.log(id);
-  const [userData,setUserData] = useState({
-    username:"",email:"",salary:""
+  const [userData, setUserData] = useState({
+    username: "", email: "", salary: ""
   })
-  
+
+  const navigate = useNavigate()
+
   console.log(userData);
+
   
+
   return (
     <div className='container text-center w-50 my-5'>
-      <h4 className='text-center'>{ id ? "Edit " : "Add "} User</h4>
+      <h4 className='text-center'>{id ? "Edit " : "Add "} User</h4>
       <div className='my-5 border rounded p-5'>
-         <div className='mb-3'>
-          <Form.Control  value={userData.username} onChange={e=>setUserData({...userData,username:e.target.value})} type="text" placeholder="Username"/>
-         </div>
-         <div className='mb-3'>
-          <Form.Control value={userData.email} onChange={e=>setUserData({...userData,email:e.target.value})} type="email" placeholder="Email" />
-         </div>
-         <div className='mb-3'>
-          <Form.Control value={userData.salary} onChange={e=>setUserData({...userData,salary:e.target.value})} type="text" placeholder="Username" type="text" placeholder="Salary" />
-         </div>
-         <div className='mt-5'>
+        <div className='mb-3'>
+          <Form.Control value={userData.username} onChange={e => setUserData({ ...userData, username: e.target.value })} type="text" placeholder="Username" />
+        </div>
+        <div className='mb-3'>
+          <Form.Control value={userData.email} onChange={e => setUserData({ ...userData, email: e.target.value })} type="email" placeholder="Email" />
+        </div>
+        <div className='mb-3'>
+          <Form.Control value={userData.salary} onChange={e => setUserData({ ...userData, salary: e.target.value })} type="text" placeholder="Username" type="text" placeholder="Salary" />
+        </div>
+        <div className='mt-5'>
           {
             id ?
-            <button className='btn btn-info'>EDIT USER</button>
-            :
-            <button className='btn btn-info'>ADD USER</button>
+              <button className='btn btn-info'>EDIT USER</button>
+              :
+              <button className='btn btn-info'>ADD USER</button>
           }
-         <button className='btn btn-info ms-5'>RESET</button>         
-         </div>
+          <button className='btn btn-info ms-5'>RESET</button>
         </div>
+      </div>
     </div>
   )
 }
