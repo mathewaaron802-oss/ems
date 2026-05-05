@@ -1,9 +1,27 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Form from 'react-bootstrap/Form';
 import { useNavigate, useParams } from 'react-router-dom';
-
+import { addUsersAPI, editUsersAPI, viewUsersAPI } from '../services/allAPI';
 
 function Manage() {
+
+const editUser = async ()=>{
+  const {username,email,salary} = userData
+  if(username && email && salary){
+    try{
+      const result = await editUsersAPI(id,userData)
+      console.log(result);
+      alert("User update successfully!!!")
+      navigate('/admin')
+    }catch(err){
+      console.log(err);
+      console.log("Something went wrong...");
+    }
+  }else{
+    alert("Please fill the form completely!!!")
+  }
+}
+
   const { id } = useParams()
   console.log(id);
   const [userData, setUserData] = useState({
@@ -14,7 +32,38 @@ function Manage() {
 
   console.log(userData);
 
-  
+  useEffect(()=>{
+    id && getUser()
+  },[])
+
+  const addUser = async ()=>{
+    const {username,email,salary} = userData
+    if(username && email && salary){
+      try{
+        const result = await addUsersAPI(userData)
+        console.log(result);
+        alert("User added successfully!!!")
+        navigate('/admin')
+      }catch(err){
+        console.log(err);
+        if(err.response.status==409){
+          alert(err.response.data);
+        }
+        console.log("Something went wrong...");
+      }
+    }else{
+      alert("Please fill the form completely!!!")
+    }
+  }
+
+  const getUser = async ()=>{
+    try{
+      const result = await viewUsersAPI(id)
+      setUserData(result.data)
+    }catch(err){
+      console.log(err);
+    }
+  }
 
   return (
     <div className='container text-center w-50 my-5'>
@@ -32,9 +81,9 @@ function Manage() {
         <div className='mt-5'>
           {
             id ?
-              <button className='btn btn-info'>EDIT USER</button>
+              <button onClick={editUser} className='btn btn-info'>EDIT USER</button>
               :
-              <button className='btn btn-info'>ADD USER</button>
+              <button onClick={addUser} className='btn btn-info'>ADD USER</button>
           }
           <button className='btn btn-info ms-5'>RESET</button>
         </div>
